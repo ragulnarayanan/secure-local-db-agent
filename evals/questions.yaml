@@ -1,0 +1,140 @@
+# Curated text-to-SQL benchmark for the Chinook schema.
+# Each entry: a natural-language question + the canonical correct SQL (the
+# reference result set, NOT the expected text — the eval compares results).
+# Tiers: easy (single table), medium (joins/aggregation), hard (multi-join/subquery/outer).
+
+- id: e1
+  difficulty: easy
+  question: How many tracks are in the database?
+  sql: SELECT COUNT(*) AS track_count FROM Track
+
+- id: e2
+  difficulty: easy
+  question: List the names of all genres.
+  sql: SELECT Name FROM Genre
+
+- id: e3
+  difficulty: easy
+  question: How many customers are there?
+  sql: SELECT COUNT(*) AS customer_count FROM Customer
+
+- id: e4
+  difficulty: easy
+  question: What are the names of all media types?
+  sql: SELECT Name FROM MediaType
+
+- id: e5
+  difficulty: easy
+  question: How many albums are in the database?
+  sql: SELECT COUNT(*) AS album_count FROM Album
+
+- id: m1
+  difficulty: medium
+  question: How many tracks does each genre have?
+  sql: >
+    SELECT g.Name, COUNT(t.TrackId) AS track_count
+    FROM Genre g JOIN Track t ON g.GenreId = t.GenreId
+    GROUP BY g.Name
+
+- id: m2
+  difficulty: medium
+  question: Which 5 artists have the most albums?
+  sql: >
+    SELECT ar.Name, COUNT(al.AlbumId) AS album_count
+    FROM Artist ar JOIN Album al ON ar.ArtistId = al.ArtistId
+    GROUP BY ar.ArtistId ORDER BY album_count DESC LIMIT 5
+
+- id: m3
+  difficulty: medium
+  question: What is the total revenue per billing country?
+  sql: SELECT BillingCountry, SUM(Total) AS revenue FROM Invoice GROUP BY BillingCountry
+
+- id: m4
+  difficulty: medium
+  question: List the 10 longest tracks by their length in milliseconds, with their names.
+  sql: SELECT Name, Milliseconds FROM Track ORDER BY Milliseconds DESC LIMIT 10
+
+- id: m5
+  difficulty: medium
+  question: How many tracks are in each playlist?
+  sql: >
+    SELECT p.Name, COUNT(pt.TrackId) AS track_count
+    FROM Playlist p JOIN PlaylistTrack pt ON p.PlaylistId = pt.PlaylistId
+    GROUP BY p.PlaylistId
+
+- id: m6
+  difficulty: medium
+  question: What are the first and last names of customers from Brazil?
+  sql: SELECT FirstName, LastName FROM Customer WHERE Country = 'Brazil'
+
+- id: m7
+  difficulty: medium
+  question: What is the average track length in milliseconds?
+  sql: SELECT AVG(Milliseconds) AS avg_ms FROM Track
+
+- id: m8
+  difficulty: medium
+  question: List the album titles by the artist named Queen.
+  sql: >
+    SELECT al.Title
+    FROM Album al JOIN Artist ar ON al.ArtistId = ar.ArtistId
+    WHERE ar.Name = 'Queen'
+
+- id: m9
+  difficulty: medium
+  question: Which 5 tracks generated the most revenue?
+  sql: >
+    SELECT t.Name, SUM(il.UnitPrice * il.Quantity) AS revenue
+    FROM Track t JOIN InvoiceLine il ON t.TrackId = il.TrackId
+    GROUP BY t.TrackId ORDER BY revenue DESC LIMIT 5
+
+- id: m10
+  difficulty: medium
+  question: How many invoices are there for each year?
+  sql: >
+    SELECT strftime('%Y', InvoiceDate) AS year, COUNT(*) AS invoice_count
+    FROM Invoice GROUP BY year
+
+- id: h1
+  difficulty: hard
+  question: Which customer has spent the most in total? Give their first name, last name, and total.
+  sql: >
+    SELECT c.FirstName, c.LastName, SUM(i.Total) AS total_spent
+    FROM Customer c JOIN Invoice i ON c.CustomerId = i.CustomerId
+    GROUP BY c.CustomerId ORDER BY total_spent DESC LIMIT 1
+
+- id: h2
+  difficulty: hard
+  question: How much total revenue is attributable to each support rep employee?
+  sql: >
+    SELECT e.FirstName, e.LastName, SUM(i.Total) AS revenue
+    FROM Employee e
+    JOIN Customer c ON c.SupportRepId = e.EmployeeId
+    JOIN Invoice i ON i.CustomerId = c.CustomerId
+    GROUP BY e.EmployeeId
+
+- id: h3
+  difficulty: hard
+  question: List the names of artists who have no albums.
+  sql: >
+    SELECT ar.Name
+    FROM Artist ar LEFT JOIN Album al ON ar.ArtistId = al.ArtistId
+    WHERE al.AlbumId IS NULL
+
+- id: h4
+  difficulty: hard
+  question: What is the total quantity of tracks sold per genre?
+  sql: >
+    SELECT g.Name, SUM(il.Quantity) AS quantity_sold
+    FROM Genre g
+    JOIN Track t ON g.GenreId = t.GenreId
+    JOIN InvoiceLine il ON t.TrackId = il.TrackId
+    GROUP BY g.GenreId
+
+- id: h5
+  difficulty: hard
+  question: Which 5 tracks appear in the most playlists?
+  sql: >
+    SELECT t.Name, COUNT(pt.PlaylistId) AS playlist_count
+    FROM Track t JOIN PlaylistTrack pt ON t.TrackId = pt.TrackId
+    GROUP BY t.TrackId ORDER BY playlist_count DESC LIMIT 5
