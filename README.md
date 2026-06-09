@@ -2,7 +2,7 @@
 
 An offline text-to-SQL agent for SQLite databases. Runs entirely on local LLMs via Ollama, with a structured-output layer and a SQL safety gate that rejects anything that isn't a safe SELECT against the allowed schema.
 
-> Status: in development (7-day build, Day 1 of 7).
+> Status: in development (7-day build, Day 5 of 7).
 
 ## What it does
 
@@ -45,7 +45,15 @@ python -m src.schema data/chinook.db
 
 ## Results
 
-_To be filled in on Day 5 after running the eval harness._
+Benchmarked on 20 questions against the Chinook schema (M4 Pro, 24 GB unified memory), `temperature = 0`, with result-equivalence checking:
+
+| Model | Accuracy | p50 latency | p95 latency |
+|-------|----------|-------------|-------------|
+| llama3.1:8b      | **85%** | 1580 ms | 2748 ms |
+| qwen2.5-coder:7b | 75%     | 1566 ms | 2580 ms |
+| phi3:mini (3.8B) | 70%     | 994 ms  | 1797 ms |
+
+See [`docs/results.md`](docs/results.md) for per-tier accuracy and failure-mode analysis.
 
 ## Architecture
 
