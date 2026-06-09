@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(/opt/homebrew/opt/python@3.11/bin/python3.11 -m venv .venv)",
+      "Bash(.venv/bin/python --version)",
+      "Bash(.venv/bin/python -c \"import sys; print\\(sys.executable\\)\")",
+      "Bash(.venv/bin/python -m pip install --upgrade pip -q)",
+      "Bash(.venv/bin/python -m pip install -e \".[dev]\")",
+      "Bash(.venv/bin/python -c \"import src.schema, sqlglot, pydantic, pandas; print\\('imports OK; sqlglot', sqlglot.__version__\\)\")",
+      "Bash(.venv/bin/python -m pytest -q)",
+      "Bash(git init *)",
+      "Bash(git branch *)",
+      "Bash(git config *)",
+      "Bash(git commit *)"
+    ]
+  }
+}

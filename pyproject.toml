@@ -1,0 +1,29 @@
+[project]
+name = "secure-local-db-agent"
+version = "0.1.0"
+description = "Offline text-to-SQL agent with structured output and SQL safety layer"
+requires-python = ">=3.11"
+dependencies = [
+    "requests>=2.31.0",
+    "pydantic>=2.5.0",
+    "sqlglot>=23.0.0",
+    "pandas>=2.1.0",
+    "streamlit>=1.30.0",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "ruff>=0.1.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+addopts = "-q --tb=short"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"

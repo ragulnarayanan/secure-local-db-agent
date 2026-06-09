@@ -1,0 +1,16 @@
+# Core
+requests>=2.31.0
+pydantic>=2.5.0
+
+# SQL safety + parsing
+sqlglot>=23.0.0
+
+# Eval + data
+pandas>=2.1.0
+
+# UI (Day 6)
+streamlit>=1.30.0
+
+# Dev
+pytest>=7.4.0
+python-dotenv>=1.0.0

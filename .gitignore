@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+.DS_Store
+.pytest_cache/
+.ruff_cache/
+evals/results/
+*.log
+# Keep data/chinook.db tracked since it's small (~1MB) and useful for reviewers
