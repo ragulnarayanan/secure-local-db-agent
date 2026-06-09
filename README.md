@@ -2,7 +2,9 @@
 
 An offline text-to-SQL agent for SQLite databases. Runs entirely on local LLMs via Ollama, with a structured-output layer and a SQL safety gate that rejects anything that isn't a safe SELECT against the allowed schema.
 
-> Status: in development (7-day build, Day 5 of 7).
+> Status: in development (7-day build, Day 6 of 7).
+
+![demo](docs/demo.gif)
 
 ## What it does
 
