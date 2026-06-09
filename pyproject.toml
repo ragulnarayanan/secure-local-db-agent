@@ -23,6 +23,9 @@ dev = [
 testpaths = ["tests"]
 python_files = "test_*.py"
 addopts = "-q --tb=short"
+markers = [
+    "integration: requires a running Ollama server (auto-skipped if unreachable)",
+]
 
 [tool.ruff]
 line-length = 100
